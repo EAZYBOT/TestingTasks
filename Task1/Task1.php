@@ -1,8 +1,15 @@
 <?php
 
+/**
+ * @param $text - Текст статьи
+ * @param $link - Ссылка на статью
+ * @return string - Сокращённый текст статьи
+ */
 function makeArticlePreview($text, $link) {
+    // Получаем строку в 200 символов
     $result = mb_substr($text, 0, 200);
 
+    // Ищем позицию 3-ого пробела
     $pos = mb_strlen($result);
     for ($i = 0; $i < 3; $i++) {
         if ($pos !== false) {
@@ -10,11 +17,16 @@ function makeArticlePreview($text, $link) {
         }
     }
 
+    // Если в тексте есть 3 слова
     if ($pos !== false) {
+        // Обрезаем
         $endReplace = mb_substr($result, $pos + 1);
+        // Делаем из данного фрагмента ссылку
         $endReplace = "<a href=\"$link\">$endReplace...</a>";
+        // Делаем результирующую строку
         $result = mb_substr($result, 0, $pos + 1) . $endReplace;
     } else {
+        // Делаем из всей строки ссылку
         $result = "<a href=\"$link\">$result...</a>";
     }
 
@@ -27,3 +39,8 @@ $articleLink = "https://ru.wikipedia.org/wiki/%D0%92%D1%81%D0%B5%D0%BC%D0%B8%D1%
 $articlePreview = makeArticlePreview($articleText, $articleLink);
 
 echo $articlePreview;
+
+/*
+ * В решении данной задачи могут возникнуть проблемы если текст
+ * изначально невозможно обрезать по всем правилам (особенно 3-е).
+ * */
